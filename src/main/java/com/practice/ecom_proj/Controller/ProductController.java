@@ -39,7 +39,6 @@ public class ProductController {
             @RequestPart("imageFile") MultipartFile imageFile) {
 
         System.out.println("🔥 RAW JSON = " + productJson);
-
         try {
             ObjectMapper mapper = new ObjectMapper();
             Product product = mapper.readValue(productJson, Product.class);
@@ -54,7 +53,6 @@ public class ProductController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-
     @GetMapping("/product/{productId}/image")
     public ResponseEntity<byte[]> getImageByProductID(@PathVariable int productId){
 
@@ -65,6 +63,29 @@ public class ProductController {
                 contentType(MediaType.valueOf(product.getImageType()))
                 .body(imageFile);
     }
+    @PutMapping("/product/{id}")
+    public ResponseEntity<String> updateProduct(@PathVariable int id,
+                                                @RequestPart("product") Product product,
+                                                @RequestPart("imageFile") MultipartFile imageFile) throws IOException {
+        Product product1 = service.updateProduct(id, product, imageFile);
 
+        if (product1!=null){
+            return new ResponseEntity<>("Updated", HttpStatus.OK);
+        }else {
+            return new ResponseEntity<>("Failed to update", HttpStatus.BAD_REQUEST);
+        }
+    }
 
+    @DeleteMapping("/product/{id}")
+    public  ResponseEntity<String> deleteProduct (@PathVariable int id){
+        Product product= service.getElementByID(id);
+
+        if (product!=null){
+            service.deleteProduct(id);
+            return new ResponseEntity<>("Updated", HttpStatus.OK);
+        }else {
+            return new ResponseEntity<>("Failed to update", HttpStatus.BAD_REQUEST);
+        }
+
+    }
 }
