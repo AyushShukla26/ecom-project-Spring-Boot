@@ -39,5 +39,9 @@ public class ProductServices {
 
         return repo.save(product);
     }
+    public List<Product> searchProducts(String keyword) {
+        return this.repo.searchProducts(keyword);
+    }
+
 }
 
