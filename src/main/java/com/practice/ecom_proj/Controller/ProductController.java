@@ -66,5 +66,9 @@ public class ProductController {
                 .body(imageFile);
     }
 
-
+    @GetMapping({"/products/search"})
+    public ResponseEntity<List<Product>> searchProduct(@RequestParam String keyword) {
+        List<Product> products = this.service.searchProducts(keyword);
+        return new ResponseEntity(products, HttpStatus.OK);
+    }
 }
